@@ -1,4 +1,4 @@
-mod request;
+pub mod request;
 use crate::errors::RequestError as Error;
 use request::Request;
 use serde_json::Value;
