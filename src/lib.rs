@@ -1,2 +1,2 @@
-mod client;
-mod errors;
+pub mod client;
+pub mod errors;
