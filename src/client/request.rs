@@ -16,7 +16,7 @@ pub struct Request {
 }
 
 impl Request {
-    pub async fn call(&self, client: Client) -> Result<Value, Error> {
+    pub async fn call(&self, client: &Client) -> Result<Value, Error> {
         let response = match self.method {
             Method::GET => self.get(&client).await,
             Method::POST => self.post(&client).await,
