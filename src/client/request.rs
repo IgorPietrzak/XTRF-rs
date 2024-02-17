@@ -10,9 +10,9 @@ pub enum Method {
 }
 
 pub struct Request {
-    method: Method,
-    path: String,
-    body: Option<HashMap<String, Value>>,
+    pub method: Method,
+    pub path: String,
+    pub body: Option<HashMap<String, Value>>,
 }
 
 impl Request {
