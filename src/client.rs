@@ -1,4 +1,7 @@
 mod request;
+use crate::errors::RequestError as Error;
+use request::Request;
+use serde_json::Value;
 
 pub struct Client {
     api_key: String,
@@ -13,7 +16,13 @@ impl Client {
         }
     }
 
-    pub async fn make_call(url: &str) {}
+    pub async fn make_call(&self, req: Request) -> Result<Value, Error> {
+        let res = req.call(self).await;
+        match res {
+            Ok(res) => return Ok(res),
+            Err(e) => return Err(Error::from(e)),
+        }
+    }
 }
 
 // token: PFgbbzTP0WvHZa8W0qm3RBzGzf

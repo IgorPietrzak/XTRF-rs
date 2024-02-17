@@ -12,22 +12,26 @@ pub enum Method {
 pub struct Request {
     method: Method,
     path: String,
-    headers: Option<HashMap<String, String>>,
     body: Option<HashMap<String, Value>>,
 }
 
 impl Request {
-    pub async fn call(&self, client: Client) {
+    pub async fn call(&self, client: &Client) -> Result<Value, Error> {
         let response = match self.method {
             Method::GET => self.get(&client).await,
             Method::POST => self.post(&client).await,
         };
+
+        response
     }
 
-    // these should return serde_json::Value
-
     async fn get(&self, client: &Client) -> Result<Value, Error> {
-        let response = reqwest::get(format!("{}/{}", client.base_url, self.path))
+        let reqwest_client = reqwest::Client::new();
+        let response = reqwest_client
+            .get(format!("{}/{}", client.base_url, self.path))
+            .header("Content-Type", "application/json")
+            .header("X-AUTH-ACCESS-TOKEN", client.api_key.clone())
+            .send()
             .await?
             .text()
             .await?;
@@ -41,6 +45,8 @@ impl Request {
             let response = reqwest_client
                 .post(format!("{}/{}", client.base_url, self.path))
                 .json(&body)
+                .header("Content-Type", "application/json")
+                .header("X-AUTH-ACCESS-TOKEN", client.api_key.clone())
                 .send()
                 .await?
                 .text()
