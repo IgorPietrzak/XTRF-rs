@@ -9,10 +9,13 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(base_url: &str, api_key: &str) -> Client {
+    pub fn new<T>(base_url: T, api_key: T) -> Self
+    where
+        T: Into<String>,
+    {
         Client {
-            base_url: base_url.to_string(),
-            api_key: api_key.to_string(),
+            base_url: base_url.into(),
+            api_key: api_key.into(),
         }
     }
 
@@ -24,4 +27,3 @@ impl Client {
         }
     }
 }
-
