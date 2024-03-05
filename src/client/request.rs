@@ -31,6 +31,7 @@ impl Request {
             .get(format!("{}/{}", client.base_url, self.path))
             .header("Content-Type", "application/json")
             .header("X-AUTH-ACCESS-TOKEN", client.api_key.clone())
+            .json(&self.body)
             .send()
             .await?
             .text()
